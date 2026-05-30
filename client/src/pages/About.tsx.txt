@@ -1,0 +1,131 @@
+import { Link } from "wouter";
+import { MessageCircle, Mic, Brain, Heart, ArrowLeft } from "lucide-react";
+
+export default function About() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-emerald-950 to-slate-950 text-white">
+      {/* Header */}
+      <div className="border-b border-emerald-900/30 bg-slate-900/40 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-emerald-400">
+              About Adi 🌿
+            </h1>
+            <p className="text-sm text-emerald-200/60 mt-1">
+              AI Conversational Emotional Companion
+            </p>
+          </div>
+
+          <Link href="/">
+            <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 transition">
+              <ArrowLeft className="w-4 h-4" />
+              Home
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Hero */}
+      <section className="max-w-5xl mx-auto px-6 py-16 text-center">
+        <h2 className="text-5xl font-bold leading-tight mb-6">
+          Your Safe Space for Conversations 💚
+        </h2>
+
+        <p className="text-lg text-emerald-100/70 max-w-3xl mx-auto leading-relaxed">
+          Adi is an AI-powered emotional wellness and conversational companion
+          designed to listen, understand emotions, and provide supportive
+          interactions through text and voice communication.
+        </p>
+      </section>
+
+      {/* Features */}
+      <section className="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Card 1 */}
+        <div className="bg-slate-900/50 border border-emerald-900/30 rounded-2xl p-6 hover:scale-105 transition">
+          <MessageCircle className="w-10 h-10 text-emerald-400 mb-4" />
+
+          <h3 className="text-xl font-semibold mb-3">
+            Smart Conversations
+          </h3>
+
+          <p className="text-sm text-emerald-100/60 leading-relaxed">
+            Engage in meaningful AI-powered chats that feel natural and human.
+          </p>
+        </div>
+
+        {/* Card 2 */}
+        <div className="bg-slate-900/50 border border-emerald-900/30 rounded-2xl p-6 hover:scale-105 transition">
+          <Mic className="w-10 h-10 text-emerald-400 mb-4" />
+
+          <h3 className="text-xl font-semibold mb-3">
+            Voice Interaction
+          </h3>
+
+          <p className="text-sm text-emerald-100/60 leading-relaxed">
+            Speak naturally using microphone support and audio transcription.
+          </p>
+        </div>
+
+        {/* Card 3 */}
+        <div className="bg-slate-900/50 border border-emerald-900/30 rounded-2xl p-6 hover:scale-105 transition">
+          <Brain className="w-10 h-10 text-emerald-400 mb-4" />
+
+          <h3 className="text-xl font-semibold mb-3">
+            Emotion Awareness
+          </h3>
+
+          <p className="text-sm text-emerald-100/60 leading-relaxed">
+            Adi analyzes emotional tone to create more empathetic responses.
+          </p>
+        </div>
+
+        {/* Card 4 */}
+        <div className="bg-slate-900/50 border border-emerald-900/30 rounded-2xl p-6 hover:scale-105 transition">
+          <Heart className="w-10 h-10 text-emerald-400 mb-4" />
+
+          <h3 className="text-xl font-semibold mb-3">
+            Mental Wellness
+          </h3>
+
+          <p className="text-sm text-emerald-100/60 leading-relaxed">
+            Built to support emotional well-being with calm and comforting
+            interactions.
+          </p>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <div className="bg-slate-900/40 border border-emerald-900/30 rounded-3xl p-10">
+          <h2 className="text-3xl font-bold text-emerald-400 mb-6">
+            Why Adi?
+          </h2>
+
+          <p className="text-emerald-100/70 leading-relaxed mb-5">
+            Many people today feel stressed, unheard, or emotionally isolated.
+            Adi was created as a conversational AI companion that provides a
+            comfortable and supportive environment for users to express their
+            thoughts freely.
+          </p>
+
+          <p className="text-emerald-100/70 leading-relaxed mb-5">
+            The platform combines AI conversation systems, voice interaction,
+            emotion-aware communication, and modern frontend technologies to
+            create a smooth and engaging experience.
+          </p>
+
+          <p className="text-emerald-100/70 leading-relaxed">
+            This project demonstrates the integration of modern web development,
+            AI systems, and emotional interaction design into one intelligent
+            application.
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-emerald-900/30 py-8 text-center text-sm text-emerald-200/50">
+        Built with 💚 using React, TypeScript, TailwindCSS, and AI APIs.
+      </footer>
+    </div>
+  );
+}
