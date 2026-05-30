@@ -189,8 +189,8 @@ export default function Chat() {
       <div className="bg-white/5 border-b border-white/10 backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard">
-              <button className="p-2 rounded-lg hover:bg-white/5 transition text-gray-400 hover:text-white border-0 bg-transparent" title="Go to Dashboard">
+            <Link href="/">
+              <button className="p-2 rounded-lg hover:bg-white/5 transition text-gray-400 hover:text-white border-0 bg-transparent" title="Back to Home">
                 <ArrowLeft className="w-5 h-5" />
               </button>
             </Link>
@@ -205,6 +205,16 @@ export default function Chat() {
           </div>
           
           <div className="flex items-center gap-3">
+            {user?.role === "admin" && (
+              <Link href="/admin">
+                <Button
+                  variant="outline"
+                  className="border-emerald-500/30 text-emerald-400 hover:text-white hover:bg-emerald-500/10 text-xs font-semibold h-9 rounded-lg"
+                >
+                  Admin Panel
+                </Button>
+              </Link>
+            )}
             <span className="text-xs text-gray-400 bg-white/5 border border-white/5 px-2.5 py-1 rounded-full font-medium">
               {user?.name || "Guest"}
             </span>

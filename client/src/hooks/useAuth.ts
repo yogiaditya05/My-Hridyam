@@ -18,7 +18,7 @@ export function useAuth() {
   const guestLoginMutation = trpc.auth.guestLogin.useMutation({
     onSuccess: async () => {
       await utils.auth.me.invalidate();
-      setLocation("/dashboard");
+      setLocation("/chat");
     },
   });
 
@@ -26,7 +26,7 @@ export function useAuth() {
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: async () => {
       await utils.auth.me.invalidate();
-      setLocation("/dashboard");
+      setLocation("/chat");
     },
   });
 
@@ -34,7 +34,7 @@ export function useAuth() {
   const signupMutation = trpc.auth.signup.useMutation({
     onSuccess: async () => {
       await utils.auth.me.invalidate();
-      setLocation("/dashboard");
+      setLocation("/chat");
     },
   });
 
