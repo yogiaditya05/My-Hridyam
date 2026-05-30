@@ -12,7 +12,7 @@ export default function About() {
           <div className="flex items-center gap-2">
             <Heart className="w-6 h-6 text-emerald-400 fill-emerald-400 animate-pulse" />
             <h1 className="text-xl font-bold text-white tracking-tight">
-              About Hridyam
+              About My Hridyam
             </h1>
           </div>
 
@@ -28,11 +28,11 @@ export default function About() {
       {/* Hero Intro */}
       <section className="max-w-4xl mx-auto px-6 py-16 text-center space-y-6">
         <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
-          What is <span className="text-emerald-400">Hridyam</span>?
+          What is <span className="text-emerald-400">My Hridyam</span>?
         </h2>
 
         <p className="text-base md:text-lg text-emerald-100/70 leading-relaxed max-w-2xl mx-auto">
-          Hridyam, meaning **"from the heart"** in Sanskrit, is a premium, emotionally intelligent AI Health and Wellness Companion. It is built to create a safe, warm, and validation-first space for users to voice their thoughts, process feelings, and check in on their emotional wellness.
+          My Hridyam, meaning **"from the heart"** in Sanskrit, is a premium, emotionally intelligent AI Health and Wellness Companion. It is built to create a safe, warm, and validation-first space for users to voice their thoughts, process feelings, and check in on their emotional wellness.
         </p>
       </section>
 
@@ -44,7 +44,7 @@ export default function About() {
           <MessageSquare className="w-9 h-9 text-emerald-400 mb-4" />
           <h3 className="text-lg font-bold mb-2">Empathetic Mirroring</h3>
           <p className="text-xs text-emerald-100/60 leading-relaxed">
-            Hridyam uses validation-first communication, acknowledging your emotions first before replying.
+            My Hridyam uses validation-first communication, acknowledging your emotions first before replying.
           </p>
         </div>
 
@@ -80,15 +80,15 @@ export default function About() {
       <section className="max-w-3xl mx-auto px-6 py-12">
         <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm space-y-6">
           <h3 className="text-2xl font-bold text-emerald-300">
-            Why We Built Hridyam
+            Why We Built My Hridyam
           </h3>
           
           <p className="text-sm text-emerald-100/70 leading-relaxed">
-            Wellness begins when we are heard. In a fast-paced digital world, finding a non-judgmental space to share emotional weight can be incredibly difficult. Hridyam was created to serve as an instant, warm, and highly private wellness companion.
+            Wellness begins when we are heard. In a fast-paced digital world, finding a non-judgmental space to share emotional weight can be incredibly difficult. My Hridyam was created to serve as an instant, warm, and highly private wellness companion.
           </p>
 
           <p className="text-sm text-emerald-100/70 leading-relaxed">
-            Rather than jumping straight to solutions or listing structured tips, Hridyam acts as an active listener. It reflect feelings, remains concise, and lets you drive the conversation, creating a more grounding and self-reflective experience.
+            Rather than jumping straight to solutions or listing structured tips, My Hridyam acts as an active listener. It reflect feelings, remains concise, and lets you drive the conversation, creating a more grounding and self-reflective experience.
           </p>
 
           <p className="text-sm text-emerald-100/70 leading-relaxed">
@@ -99,7 +99,7 @@ export default function About() {
 
       {/* Footer */}
       <footer className="border-t border-white/5 py-8 text-center text-xs text-emerald-100/30">
-        Hridyam AI Companion • Made from the heart 💚
+        My Hridyam AI Companion • Made from the heart 💚
       </footer>
     </div>
   );

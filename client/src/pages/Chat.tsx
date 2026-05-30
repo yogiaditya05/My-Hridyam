@@ -196,7 +196,7 @@ export default function Chat() {
             </Link>
             <div>
               <h1 className="text-xl font-bold text-emerald-400 flex items-center gap-1.5 leading-none">
-                Hridyam 💚
+                My Hridyam 💚
               </h1>
               <p className="text-xs text-emerald-200/50 mt-1">
                 always here • always listening
@@ -228,7 +228,7 @@ export default function Chat() {
                 <Heart className="w-12 h-12 text-emerald-400 fill-emerald-400 animate-pulse" />
               </div>
               <h2 className="text-2xl font-bold text-emerald-300 mb-2">
-                Welcome to Hridyam 💚
+                Welcome to My Hridyam 💚
               </h2>
               <p className="text-emerald-100/60 max-w-md text-sm leading-relaxed mb-6">
                 I am your emotional health companion. Tell me what's on your mind — your struggles, your victories, or just how your day went.

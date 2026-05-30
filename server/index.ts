@@ -32,7 +32,7 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 
 async function startServer() {
   // 1. Initialize MySQL Database schemas and run pending migrations
-  console.log("[Hridyam Server] Connecting to database and checking migrations...");
+  console.log("[My Hridyam Server] Connecting to database and checking migrations...");
   await runMigrations();
 
   const app = express();
@@ -70,11 +70,11 @@ async function startServer() {
   const port = await findAvailablePort(preferredPort);
 
   if (port !== preferredPort) {
-    console.log(`[Hridyam Server] Port ${preferredPort} is busy, using port ${port} instead.`);
+    console.log(`[My Hridyam Server] Port ${preferredPort} is busy, using port ${port} instead.`);
   }
 
   server.listen(port, () => {
-    console.log(`[Hridyam Server] Hridyam Companion running at http://localhost:${port}/`);
+    console.log(`[My Hridyam Server] My Hridyam Companion running at http://localhost:${port}/`);
   });
 }
 

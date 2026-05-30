@@ -29,7 +29,7 @@ export default function Home() {
           <div className="flex items-center gap-2.5">
             <Heart className="w-6 h-6 text-emerald-400 fill-emerald-400 animate-pulse" />
             <span className="text-xl font-bold tracking-tight text-white">
-              Hridyam
+              My Hridyam
             </span>
           </div>
 
@@ -83,7 +83,7 @@ export default function Home() {
           </div>
 
           <p className="text-base md:text-lg text-emerald-100/60 leading-relaxed max-w-2xl mx-auto">
-            Hridyam is an emotionally intelligent companion designed to support your mental and emotional well-being. Share your thoughts, track your moods, and connect through warm, human-like voice and text conversations.
+            My Hridyam is an emotionally intelligent companion designed to support your mental and emotional well-being. Share your thoughts, track your moods, and connect through warm, human-like voice and text conversations.
           </p>
 
           {/* Quick Info Grid */}
@@ -117,13 +117,13 @@ export default function Home() {
             {isAuthenticated ? (
               <Link href="/chat">
                 <Button className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-6 text-base font-semibold shadow-lg shadow-emerald-500/10 border-0 rounded-2xl">
-                  Continue Chatting with Hridyam
+                  Continue Chatting with My Hridyam
                 </Button>
               </Link>
             ) : (
               <Link href="/login">
                 <Button className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-6 text-base font-semibold shadow-lg shadow-emerald-500/10 border-0 rounded-2xl">
-                  Start Chatting with Hridyam
+                  Start Chatting with My Hridyam
                 </Button>
               </Link>
             )}
@@ -135,7 +135,7 @@ export default function Home() {
       <footer className="bg-slate-950/40 border-t border-white/5 py-6">
         <div className="max-w-5xl mx-auto px-6 text-center text-emerald-100/30 text-xs">
           <p>
-            Hridyam is an AI Health Companion designed for emotional wellness conversations. It is not a replacement for professional clinical therapy or crisis intervention.
+            My Hridyam is an AI Health Companion designed for emotional wellness conversations. It is not a replacement for professional clinical therapy or crisis intervention.
           </p>
         </div>
       </footer>
