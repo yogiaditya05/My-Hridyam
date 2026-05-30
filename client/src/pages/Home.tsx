@@ -44,9 +44,9 @@ export default function Home() {
             </Link>
 
             {isAuthenticated ? (
-              <Link href="/chat">
+              <Link href="/dashboard">
                 <Button className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm border-0">
-                  Open Chat
+                  Dashboard
                 </Button>
               </Link>
             ) : (
@@ -115,9 +115,9 @@ export default function Home() {
 
           <div className="pt-6">
             {isAuthenticated ? (
-              <Link href="/chat">
+              <Link href="/dashboard">
                 <Button className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-6 text-base font-semibold shadow-lg shadow-emerald-500/10 border-0 rounded-2xl">
-                  Continue Chatting with My Hridyam
+                  Go to Dashboard
                 </Button>
               </Link>
             ) : (

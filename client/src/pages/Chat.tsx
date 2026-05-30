@@ -189,8 +189,8 @@ export default function Chat() {
       <div className="bg-white/5 border-b border-white/10 backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/">
-              <button className="p-2 rounded-lg hover:bg-white/5 transition text-gray-400 hover:text-white border-0 bg-transparent">
+            <Link href="/dashboard">
+              <button className="p-2 rounded-lg hover:bg-white/5 transition text-gray-400 hover:text-white border-0 bg-transparent" title="Go to Dashboard">
                 <ArrowLeft className="w-5 h-5" />
               </button>
             </Link>

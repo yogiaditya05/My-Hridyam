@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
+import Dashboard from "./pages/Dashboard";
 
 import { Route, Switch } from "wouter";
 
@@ -30,6 +31,9 @@ function Router() {
 
       {/* Admin Dashboard */}
       <Route path="/admin" component={AdminDashboard} />
+
+      {/* User Dashboard */}
+      <Route path="/dashboard" component={Dashboard} />
 
       {/* 404 Page */}
       <Route path="/404" component={NotFound} />
