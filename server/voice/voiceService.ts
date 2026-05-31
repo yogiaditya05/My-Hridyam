@@ -63,14 +63,6 @@ export async function transcribeAudio(
   options: TranscribeOptions
 ): Promise<TranscriptionResponse | TranscriptionError> {
   try {
-    if (!ENV.forgeApiUrl) {
-      return {
-        error: "Voice transcription service is not configured",
-        code: "SERVICE_ERROR",
-        details: "BUILT_IN_FORGE_API_URL / OPENAI_API_KEY is not set"
-      };
-    }
-
     let audioBuffer: Buffer;
     let mimeType = "audio/webm";
 
@@ -120,12 +112,83 @@ export async function transcribeAudio(
       };
     }
 
+    // Use Gemini if API key is provided
+    if (ENV.geminiApiKey) {
+      const base64Audio = audioBuffer.toString("base64");
+      const promptText = options.prompt || (options.language
+        ? `Transcribe the user's speech. The spoken language is ${options.language}. Return only the transcription text, nothing else.`
+        : "Please provide a highly accurate transcription of the audio content. Return only the transcription text. Do not include any prefix, introduction, explanations, or commentary. If you hear no speech, output nothing.");
+
+      const payload = {
+        contents: [
+          {
+            parts: [
+              {
+                inlineData: {
+                  mimeType: mimeType,
+                  data: base64Audio
+                }
+              },
+              {
+                text: promptText
+              }
+            ]
+          }
+        ]
+      };
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${ENV.geminiApiKey}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "");
+        return {
+          error: "Gemini transcription API request failed",
+          code: "TRANSCRIPTION_FAILED",
+          details: `${response.status} ${response.statusText}${errorText ? `: ${errorText}` : ""}`
+        };
+      }
+
+      const data = await response.json() as any;
+      const transcriptionText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (typeof transcriptionText !== "string") {
+        return {
+          error: "Invalid Gemini transcription response",
+          code: "SERVICE_ERROR",
+          details: "Response did not contain transcription text"
+        };
+      }
+
+      return {
+        text: transcriptionText.trim(),
+        language: "unknown"
+      };
+    }
+
+    // Fallback logic starts here (Whisper)
+    if (!ENV.forgeApiUrl) {
+      return {
+        error: "Voice transcription service is not configured",
+        code: "SERVICE_ERROR",
+        details: "BUILT_IN_FORGE_API_URL / OPENAI_API_KEY is not set"
+      };
+    }
+
     // 2. Prepare FormData
+    const isGroq = process.env.OPENAI_API_KEY?.startsWith("gsk_");
+    const modelName = isGroq ? "whisper-large-v3" : "whisper-1";
+    
     const formData = new FormData();
     const filename = `audio.${getFileExtension(mimeType)}`;
     const audioBlob = new Blob([new Uint8Array(audioBuffer)], { type: mimeType });
     formData.append("file", audioBlob, filename);
-    formData.append("model", "whisper-1");
+    formData.append("model", modelName);
     formData.append("response_format", "verbose_json");
 
     if (options.prompt) {
@@ -135,11 +198,13 @@ export async function transcribeAudio(
     }
 
     // 3. Request Whisper Endpoint
-    // Use real OpenAI API key and URL if available, otherwise fall back to Forge URL
+    // Use real OpenAI/Groq API key and URL if available, otherwise fall back to Forge URL
     const hasOpenAI = process.env.OPENAI_API_KEY && !process.env.OPENAI_API_KEY.startsWith("sk-or-");
     const apiKey = hasOpenAI ? process.env.OPENAI_API_KEY : ENV.forgeApiKey;
-    const rawBaseUrl = hasOpenAI ? "https://api.openai.com" : ENV.forgeApiUrl;
-
+    const rawBaseUrl = hasOpenAI 
+      ? (isGroq ? "https://api.groq.com/openai" : "https://api.openai.com") 
+      : ENV.forgeApiUrl;
+    
     if (!apiKey) {
       return {
         error: "Voice transcription API key is not configured",

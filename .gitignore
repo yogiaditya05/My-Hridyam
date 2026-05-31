@@ -106,8 +106,14 @@ temp/
 *.sqlite
 *.sqlite3
 
+# Local Uploads and Testing
+public/uploads/
+test-*.js
+test-*.ts
+
 # Webdev artifacts (checkpoint zips, migrations, etc.)
 .webdev/
 
 # Manus version file (auto-generated, not part of source)
 client/public/__manus__/version.json
+
