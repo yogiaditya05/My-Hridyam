@@ -1,12 +1,12 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { pgTable, serial, text, timestamp, boolean, integer } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 /**
  * Users table backing auth flow and personalized memory.
- * Uses SQLite dialect.
+ * Uses PostgreSQL dialect.
  */
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   openId: text("openId").notNull().unique(),
   name: text("name"),
   email: text("email"),
@@ -14,9 +14,9 @@ export const users = sqliteTable("users", {
   loginMethod: text("loginMethod"),
   role: text("role").default("user").notNull(), // 'user' | 'admin'
   userContext: text("userContext"), // stores a RAG-ready emotional / goals summary
-  createdAt: integer("createdAt", { mode: "timestamp" }).defaultNow().notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).defaultNow().notNull(),
-  lastSignedIn: integer("lastSignedIn", { mode: "timestamp" }).defaultNow().notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  lastSignedIn: timestamp("lastSignedIn", { mode: "date" }).defaultNow().notNull(),
 });
 
 export type User = typeof users.$inferSelect;
@@ -24,16 +24,16 @@ export type InsertUser = typeof users.$inferInsert;
 
 /**
  * Chat messages table for storing conversation history.
- * Uses SQLite dialect.
+ * Uses PostgreSQL dialect.
  */
-export const messages = sqliteTable("messages", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
   userId: integer("userId").notNull(),
   role: text("role").notNull(), // 'user' | 'assistant'
   content: text("content").notNull(),
-  isCrisisDetected: integer("isCrisisDetected", { mode: "boolean" }).default(false).notNull(),
+  isCrisisDetected: boolean("isCrisisDetected").default(false).notNull(),
   emotion: text("emotion"), // stores detected emotion (e.g. sadness, anxiety, neutral)
-  createdAt: integer("createdAt", { mode: "timestamp" }).defaultNow().notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
 });
 
 export type Message = typeof messages.$inferSelect;
