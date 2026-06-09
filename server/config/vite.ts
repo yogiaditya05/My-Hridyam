@@ -54,7 +54,11 @@ export async function setupVite(app: Express, server: Server) {
  * Serves static build files in production.
  */
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(process.cwd(), "dist", "public");
+  // Check if we are running the bundled dist/index.js where public is a sibling
+  const isBundled = fs.existsSync(path.resolve(import.meta.dirname, "public"));
+  const distPath = isBundled
+    ? path.resolve(import.meta.dirname, "public")
+    : path.resolve(import.meta.dirname, "../../dist/public");
   
   if (!fs.existsSync(distPath)) {
     console.error(
