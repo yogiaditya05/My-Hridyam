@@ -3,6 +3,11 @@
  * This is a wrapper that calls the backend storage API.
  */
 
+const getApiUrl = (path: string) => {
+  const base = (import.meta.env.VITE_ANALYTICS_ENDPOINT || "").replace(/\/$/, "");
+  return base ? `${base}${path}` : path;
+};
+
 export async function storagePut(
   key: string,
   data: Blob | Uint8Array | string | any,
@@ -25,7 +30,7 @@ export async function storagePut(
     formData.append("file", fileData);
 
     // Call backend storage endpoint
-    const response = await fetch("/api/storage/upload", {
+    const response = await fetch(getApiUrl("/api/storage/upload"), {
       method: "POST",
       body: formData,
     });
@@ -52,7 +57,7 @@ export async function storageGet(
       params.append("expiresIn", expiresIn.toString());
     }
 
-    const response = await fetch(`/api/storage/get?${params.toString()}`);
+    const response = await fetch(getApiUrl(`/api/storage/get?${params.toString()}`));
 
     if (!response.ok) {
       throw new Error(`Get failed: ${response.statusText}`);
@@ -65,3 +70,4 @@ export async function storageGet(
     throw error;
   }
 }
+

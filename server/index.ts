@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
+import cors from "cors";
 import net from "net";
 import path from "path";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
@@ -37,6 +38,14 @@ async function startServer() {
 
   const app = express();
   const server = createServer(app);
+
+  // Configure CORS
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",") : true,
+      credentials: true,
+    })
+  );
 
   // Configure body parsers
   app.use(express.json({ limit: "50mb" }));
