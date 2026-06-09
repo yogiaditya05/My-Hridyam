@@ -21,7 +21,7 @@ export default function Login() {
     guestError,
   } = useAuth();
 
-  const activeError = formError || loginError || signupError || guestError;
+  const activeError = formError || (isLogin ? loginError : signupError) || guestError;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
