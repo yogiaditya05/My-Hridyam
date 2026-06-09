@@ -4,6 +4,10 @@ import postgres from "postgres";
 import { ENV } from "../utils/env";
 import * as path from "path";
 import * as fs from "fs";
+import dns from "dns";
+
+// Force IPv4 resolution to prevent ENETUNREACH issues on environments with disabled IPv6 (like Render)
+dns.setDefaultResultOrder("ipv4first");
 
 console.log("[Database] Initializing PostgreSQL connection...");
 
