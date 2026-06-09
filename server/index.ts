@@ -82,8 +82,8 @@ async function startServer() {
     console.log(`[My Hridyam Server] Port ${preferredPort} is busy, using port ${port} instead.`);
   }
 
-  server.listen(port, () => {
-    console.log(`[My Hridyam Server] My Hridyam Companion running at http://localhost:${port}/`);
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`[My Hridyam Server] My Hridyam Companion running at http://0.0.0.0:${port}/`);
   });
 }
 
