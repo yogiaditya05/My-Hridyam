@@ -7,12 +7,23 @@ import * as fs from "fs";
 
 console.log("[Database] Initializing PostgreSQL connection...");
 
-// Configure SSL based on Supabase or require options
-const isSslRequired = ENV.databaseUrl.includes("supabase.co") || 
-                       ENV.databaseUrl.includes("sslmode=require") || 
-                       ENV.databaseUrl.includes("supabase.net");
+const dbUrl = ENV.databaseUrl || "";
+if (!dbUrl.startsWith("postgres://") && !dbUrl.startsWith("postgresql://")) {
+  console.error("\n==========================================================================");
+  console.error("[Database Error] DATABASE_URL must be a valid PostgreSQL connection string!");
+  console.error("Expected prefix: postgres:// or postgresql://");
+  console.error("Current value:  ", dbUrl);
+  console.error("Please update your DATABASE_URL environment variable in your host settings.");
+  console.error("==========================================================================\n");
+  process.exit(1);
+}
 
-export const client = postgres(ENV.databaseUrl, {
+// Configure SSL based on Supabase or require options
+const isSslRequired = dbUrl.includes("supabase.co") || 
+                       dbUrl.includes("sslmode=require") || 
+                       dbUrl.includes("supabase.net");
+
+export const client = postgres(dbUrl, {
   ssl: isSslRequired ? "require" : undefined,
 });
 
