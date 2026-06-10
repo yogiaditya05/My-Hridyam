@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 import { ENV } from "../utils/env";
 import { ONE_YEAR_MS } from "../../shared/const";
 
@@ -8,15 +9,15 @@ const getSecretKey = () => new TextEncoder().encode(ENV.cookieSecret);
  * Creates a JWT session token for a given user openId and name.
  */
 export async function createSessionToken(openId: string, name: string): Promise<string> {
-  const { SignJWT } = await import("jose");
-  const secretKey = getSecretKey();
-  const issuedAt = Date.now();
-  const expirationSeconds = Math.floor((issuedAt + ONE_YEAR_MS) / 1000);
+  const secretKey = ENV.cookieSecret;
+  const issuedAt = Math.floor(Date.now() / 1000);
+  const expirationSeconds = issuedAt + Math.floor(ONE_YEAR_MS / 1000);
 
-  return new SignJWT({ openId, name })
-    .setProtectedHeader({ alg: "HS256", typ: "JWT" })
-    .setExpirationTime(expirationSeconds)
-    .sign(secretKey);
+  return jwt.sign(
+    { openId, name },
+    secretKey,
+    { algorithm: "HS256", expiresIn: Math.floor(ONE_YEAR_MS / 1000) }
+  );
 }
 
 /**
@@ -24,11 +25,10 @@ export async function createSessionToken(openId: string, name: string): Promise<
  */
 export async function verifySession(token: string): Promise<{ openId: string; name: string } | null> {
   try {
-    const { jwtVerify } = await import("jose");
-    const secretKey = getSecretKey();
-    const { payload } = await jwtVerify(token, secretKey, {
+    const secretKey = ENV.cookieSecret;
+    const payload = jwt.verify(token, secretKey, {
       algorithms: ["HS256"],
-    });
+    }) as any;
     const { openId, name } = payload as Record<string, unknown>;
     
     if (typeof openId === "string" && typeof name === "string") {
