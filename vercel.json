@@ -4,7 +4,7 @@
   "outputDirectory": "dist/public",
   "functions": {
     "api/index.ts": {
-      "includeFiles": ["drizzle/**", "server/**", "shared/**"]
+      "includeFiles": ["drizzle/**"]
     }
   },
   "rewrites": [
