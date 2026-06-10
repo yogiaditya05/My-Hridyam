@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import { SignJWT, jwtVerify } from "jose";
 import { ENV } from "../utils/env";
 import { ONE_YEAR_MS } from "../../shared/const";
 
@@ -9,6 +8,7 @@ const getSecretKey = () => new TextEncoder().encode(ENV.cookieSecret);
  * Creates a JWT session token for a given user openId and name.
  */
 export async function createSessionToken(openId: string, name: string): Promise<string> {
+  const { SignJWT } = await import("jose");
   const secretKey = getSecretKey();
   const issuedAt = Date.now();
   const expirationSeconds = Math.floor((issuedAt + ONE_YEAR_MS) / 1000);
@@ -24,6 +24,7 @@ export async function createSessionToken(openId: string, name: string): Promise<
  */
 export async function verifySession(token: string): Promise<{ openId: string; name: string } | null> {
   try {
+    const { jwtVerify } = await import("jose");
     const secretKey = getSecretKey();
     const { payload } = await jwtVerify(token, secretKey, {
       algorithms: ["HS256"],
