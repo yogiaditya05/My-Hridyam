@@ -1,4 +1,4 @@
-import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG, COOKIE_NAME } from "@shared/const";
+import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG, COOKIE_NAME } from "../../shared/const";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { parse as parseCookie } from "cookie";
 import type * as express from "express";

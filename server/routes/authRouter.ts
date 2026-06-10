@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { router, publicProcedure } from "../config/trpc";
-import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
+import { COOKIE_NAME, ONE_YEAR_MS } from "../../shared/const";
 import { getSessionCookieOptions } from "../utils/cookies";
 import { createSessionToken, hashPassword, verifyPassword } from "../auth/authService";
 import { upsertUser, getUserByEmail } from "../db/queries";
