@@ -7,7 +7,8 @@ import path from "path";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "./routers";
 import { createContext } from "./config/trpc";
-import { serveStatic, setupVite } from "./config/vite";
+// vite.ts is imported dynamically below — it pulls in devDependencies
+// (vite, tailwindcss, react plugin) that don't exist in Vercel serverless bundles.
 import { apiRouter } from "./routes/api";
 import { runMigrations } from "./db/connection";
 import { ENV } from "./utils/env";
@@ -69,7 +70,8 @@ async function startServer() {
 
   const server = createServer(app);
 
-  // 5. Build/Serve Frontend SPA
+  // 5. Build/Serve Frontend SPA (dynamic import to avoid loading devDependencies)
+  const { serveStatic, setupVite } = await import("./config/vite");
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {

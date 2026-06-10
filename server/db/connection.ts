@@ -19,7 +19,7 @@ if (!dbUrl.startsWith("postgres://") && !dbUrl.startsWith("postgresql://")) {
   console.error("Current value:  ", dbUrl);
   console.error("Please update your DATABASE_URL environment variable in your host settings.");
   console.error("==========================================================================\n");
-  process.exit(1);
+  throw new Error("DATABASE_URL is not a valid PostgreSQL connection string");
 }
 
 // Configure SSL based on Supabase or require options
