@@ -149,16 +149,28 @@ export default function Chat() {
     setIsLoading(true);
     setError(null);
     try {
-      // 1. Upload audio to S3 / local static server
-      const { url } = await storagePut(
-        `audio/${Date.now()}.webm`,
-        audioBlob,
-        "audio/webm"
-      );
+      // 1. Convert Blob to Base64 string
+      const reader = new FileReader();
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => {
+          try {
+            const result = reader.result as string;
+            const base64Data = result.split(",")[1];
+            resolve(base64Data);
+          } catch (e) {
+            reject(e);
+          }
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(audioBlob);
+      });
+
+      const base64Audio = await base64Promise;
 
       // 2. Transcribe audio to text
       const transcriptionResult = await chatTranscribe.mutateAsync({
-        audioUrl: url,
+        audioBase64: base64Audio,
+        mimeType: "audio/webm",
       });
 
       // 3. Send text message to Hridyam

@@ -3,7 +3,9 @@ import * as path from "path";
 import { ENV } from "../utils/env";
 
 export type TranscribeOptions = {
-  audioUrl: string; // File URL (S3 URL or local path like /uploads/audio_xxx.webm)
+  audioUrl?: string; // File URL (S3 URL or local path like /uploads/audio_xxx.webm)
+  audioBase64?: string; // Direct Base64 audio content
+  mimeType?: string; // Mimetype of the Base64 audio
   language?: string; // e.g. "en", "es", "hi"
   prompt?: string; // Optional context prompt for Whisper
 };
@@ -64,42 +66,53 @@ export async function transcribeAudio(
 ): Promise<TranscriptionResponse | TranscriptionError> {
   try {
     let audioBuffer: Buffer;
-    let mimeType = "audio/webm";
+    let mimeType = options.mimeType || "audio/webm";
 
-    // 1. Resolve Audio Content (Optimized local read vs remote fetch)
-    const localMatch = options.audioUrl.match(/\/uploads\/([^?#]+)/);
-    if (localMatch && localMatch[1]) {
-      const filename = localMatch[1];
-      const filePath = path.join(path.resolve("./public/uploads"), filename);
-      if (fs.existsSync(filePath)) {
-        audioBuffer = fs.readFileSync(filePath);
-        const ext = path.extname(filePath).toLowerCase();
-        if (ext === ".webm") mimeType = "audio/webm";
-        else if (ext === ".mp3" || ext === ".mpeg") mimeType = "audio/mpeg";
-        else if (ext === ".wav") mimeType = "audio/wav";
+    if (options.audioBase64) {
+      audioBuffer = Buffer.from(options.audioBase64, "base64");
+    } else if (options.audioUrl) {
+      // 1. Resolve Audio Content (Optimized local read vs remote fetch)
+      const localMatch = options.audioUrl.match(/\/uploads\/([^?#]+)/);
+      if (localMatch && localMatch[1]) {
+        const filename = localMatch[1];
+        const isVercel = !!process.env.VERCEL;
+        const uploadsDir = isVercel ? "/tmp/uploads" : path.resolve("./public/uploads");
+        const filePath = path.join(uploadsDir, filename);
+        if (fs.existsSync(filePath)) {
+          audioBuffer = fs.readFileSync(filePath);
+          const ext = path.extname(filePath).toLowerCase();
+          if (ext === ".webm") mimeType = "audio/webm";
+          else if (ext === ".mp3" || ext === ".mpeg") mimeType = "audio/mpeg";
+          else if (ext === ".wav") mimeType = "audio/wav";
+        } else {
+          return {
+            error: "Local audio file not found on disk",
+            code: "INVALID_FORMAT",
+            details: `Path checked: ${filePath}`
+          };
+        }
       } else {
-        return {
-          error: "Local audio file not found on disk",
-          code: "INVALID_FORMAT",
-          details: `Path checked: ${filePath}`
-        };
+        // Remote download fallback
+        const fetchUrl = options.audioUrl.startsWith("http")
+          ? options.audioUrl
+          : `${ENV.oAuthServerUrl.replace(/\/$/, "")}${options.audioUrl}`;
+
+        const response = await fetch(fetchUrl);
+        if (!response.ok) {
+          return {
+            error: "Failed to download remote audio file",
+            code: "INVALID_FORMAT",
+            details: `HTTP ${response.status}: ${response.statusText}`
+          };
+        }
+        audioBuffer = Buffer.from(await response.arrayBuffer());
+        mimeType = response.headers.get("content-type") || "audio/webm";
       }
     } else {
-      // Remote download fallback
-      const fetchUrl = options.audioUrl.startsWith("http")
-        ? options.audioUrl
-        : `${ENV.oAuthServerUrl.replace(/\/$/, "")}${options.audioUrl}`;
-
-      const response = await fetch(fetchUrl);
-      if (!response.ok) {
-        return {
-          error: "Failed to download remote audio file",
-          code: "INVALID_FORMAT",
-          details: `HTTP ${response.status}: ${response.statusText}`
-        };
-      }
-      audioBuffer = Buffer.from(await response.arrayBuffer());
-      mimeType = response.headers.get("content-type") || "audio/webm";
+      return {
+        error: "No audio URL or Base64 data provided",
+        code: "INVALID_FORMAT",
+      };
     }
 
     // Check size limit (16MB)

@@ -144,17 +144,21 @@ export const chatRouter = router({
     return await getUserMessages(userId, 50);
   }),
 
-  // Transcribes audio file upload URLs to text using Whisper
+  // Transcribes audio files (via URL or base64) to text using Whisper/Gemini
   transcribe: protectedProcedure
     .input(
       z.object({
-        audioUrl: z.string(),
+        audioUrl: z.string().optional(),
+        audioBase64: z.string().optional(),
+        mimeType: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
       try {
         const result = await transcribeAudio({
           audioUrl: input.audioUrl,
+          audioBase64: input.audioBase64,
+          mimeType: input.mimeType,
         });
         
         if ("error" in result) {

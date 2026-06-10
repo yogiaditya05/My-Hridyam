@@ -3,7 +3,8 @@ import * as path from "path";
 import crypto from "crypto";
 import { ENV } from "../utils/env";
 
-const UPLOADS_DIR = path.resolve("./public/uploads");
+const isVercel = !!process.env.VERCEL;
+const UPLOADS_DIR = isVercel ? "/tmp/uploads" : path.resolve("./public/uploads");
 
 function ensureUploadsDir() {
   if (!fs.existsSync(UPLOADS_DIR)) {

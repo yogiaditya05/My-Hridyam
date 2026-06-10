@@ -12,6 +12,37 @@ import { apiRouter } from "./routes/api";
 import { runMigrations } from "./db/connection";
 import { ENV } from "./utils/env";
 
+const app = express();
+
+// Configure CORS
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",") : true,
+    credentials: true,
+  })
+);
+
+// Configure body parsers
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+// Mount Uploads and static file server directly to avoid Vite interception
+const isVercel = !!process.env.VERCEL;
+const uploadsDir = isVercel ? "/tmp/uploads" : path.resolve("./public/uploads");
+app.use("/uploads", express.static(uploadsDir));
+
+// Mount REST API endpoints (e.g., S3/local file uploads)
+app.use("/api", apiRouter);
+
+// Mount tRPC API endpoint
+app.use(
+  "/api/trpc",
+  createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
+
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise((resolve) => {
     const server = net.createServer();
@@ -32,40 +63,11 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 }
 
 async function startServer() {
-  // 1. Initialize MySQL Database schemas and run pending migrations
+  // 1. Initialize Database schemas and run pending migrations
   console.log("[My Hridyam Server] Connecting to database and checking migrations...");
   await runMigrations();
 
-  const app = express();
   const server = createServer(app);
-
-  // Configure CORS
-  app.use(
-    cors({
-      origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",") : true,
-      credentials: true,
-    })
-  );
-
-  // Configure body parsers
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));
-
-  // 2. Mount Uploads and static file server directly to avoid Vite interception
-  const uploadsDir = path.resolve("./public/uploads");
-  app.use("/uploads", express.static(uploadsDir));
-
-  // 3. Mount REST API endpoints (e.g., S3/local file uploads)
-  app.use("/api", apiRouter);
-
-  // 4. Mount tRPC API endpoint
-  app.use(
-    "/api/trpc",
-    createExpressMiddleware({
-      router: appRouter,
-      createContext,
-    })
-  );
 
   // 5. Build/Serve Frontend SPA
   if (process.env.NODE_ENV === "development") {
@@ -87,6 +89,10 @@ async function startServer() {
   });
 }
 
-startServer().catch((err) => {
-  console.error("[Hridyam Server] Bootstrap crash error:", err);
-});
+if (!isVercel) {
+  startServer().catch((err) => {
+    console.error("[Hridyam Server] Bootstrap crash error:", err);
+  });
+}
+
+export default app;
